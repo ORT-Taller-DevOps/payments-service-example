@@ -1,6 +1,6 @@
 #!/bin/bash
 
-AWS_DIR="/tmp/.aws/credentials"
+AWS_DIR="/tmp/.aws"
 mkdir $AWS_DIR
 touch $AWS_DIR/credentials
 cat << EOF > $AWS_DIR/credentials
