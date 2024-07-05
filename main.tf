@@ -4,11 +4,15 @@ provider "aws" {
   profile = "default"
 }
 
-resource "aws_ecr_repository" "my_ecr_repo" {
+resource "aws_ecr_repository" "payments-service-example_repo" {
   name                 = "payments-service-example"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
     scan_on_push = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
