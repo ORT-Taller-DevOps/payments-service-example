@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         java-version: [8.0.x]
+        terraform_version: ["1.9.1"]
 
     steps:
       - name: Checkout code
@@ -46,6 +47,25 @@ jobs:
       - name: Amazon ECR Login
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve
 
       - name: Build, tag, and push docker image to Amazon ECR
         env:
