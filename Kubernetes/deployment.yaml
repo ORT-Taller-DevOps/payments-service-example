@@ -4,14 +4,14 @@ metadata:
   name: payments-service-example
   labels:
     app: payments-service
-# spec:
-#   type: LoadBalancer
-#   selector:
-#     app: payments-service
-#   ports:
-#     - protocol: TCP
-#       port: 80
-#       targetPort: 80
+spec:
+  type: LoadBalancer
+  selector:
+    app: payments-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
