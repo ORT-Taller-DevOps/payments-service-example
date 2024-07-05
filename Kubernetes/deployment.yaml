@@ -31,7 +31,6 @@ spec:
     spec:
       containers:
       - name: payments-service-example-container
-        # The $REPOSITORY_URI and $IMAGE_TAG placeholders will be replaced by actual values supplied by the build action in your workflow
-        image: $REPOSITORY_URI:$IMAGE_TAG
+        image: 894577096821.dkr.ecr.us-east-1.amazonaws.com/payments-service-example:latest
         ports:
         - containerPort: 80
