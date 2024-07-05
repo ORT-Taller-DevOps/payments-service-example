@@ -1,8 +1,9 @@
 #!/bin/bash
 
-mkdir ~/.aws
-touch ~/.aws/credentials
-cat << EOF > ~/.aws/credentials
+AWS_DIR="/tmp/.aws/credentials"
+mkdir $AWS_DIR
+touch $AWS_DIR/credentials
+cat << EOF > $AWS_DIR/credentials
 [default]
 aws_access_key_id = $1
 aws_secret_access_key = $2
