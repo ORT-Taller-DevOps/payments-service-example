@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  - ECR_REPOSITORY: ${{ vars.AWS_ECR_REPOSITORY_NAME }}
+  ECR_REPOSITORY: ${{ vars.AWS_ECR_REPOSITORY_NAME }}
 
 jobs:
   generate_image:
