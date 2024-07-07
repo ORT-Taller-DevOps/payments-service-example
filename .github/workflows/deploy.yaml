@@ -85,3 +85,4 @@ jobs:
       - name: Deploy to EKS
         run: |
           kubectl apply -f ./Kubernetes/deployment.yaml
+          kubectl rollout restart deployment payments-service-deployment
