@@ -44,7 +44,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.generate_image.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}
+          tags: ${{ env.ECR_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}
 
   # build:
   #   runs-on: ubuntu-latest
