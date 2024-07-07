@@ -10,7 +10,31 @@ env:
   ECR_REPOSITORY: ${{ vars.AWS_ECR_REPOSITORY_NAME }}
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+ 
+    strategy:
+      matrix:
+        java-version: [8.0.x]
+ 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 5
+ 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java-version }}
+          cache: 'maven'
+ 
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
   generate_image:
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -45,29 +69,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ env.ECR_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}
-
-  # build:
-  #   runs-on: ubuntu-latest
-
-  #   strategy:
-  #     matrix:
-  #       java-version: [8.0.x]
-
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 5
-
-  #     - name: Setup Java
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: ${{ matrix.java-version }}
-  #         cache: 'maven'
-
-  #     - name: Build with Maven
-  #       run: mvn -B package --file pom.xml
 
   # deploy:
   #   runs-on: ubuntu-latest
