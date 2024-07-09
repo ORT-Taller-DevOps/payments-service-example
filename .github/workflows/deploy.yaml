@@ -68,12 +68,10 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: java-artifact.jar
-          path: /tmp
 
       - name: Build and push
         id: build-and-push
