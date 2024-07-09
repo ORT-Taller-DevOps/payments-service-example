@@ -10,6 +10,6 @@ RUN mvn clean package
 
 FROM openjdk:8-jdk-alpine
 
-COPY --from=build /usr/src/app/target/payments-service-example-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build target/payments-service-example-0.0.1-SNAPSHOT.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "/app.jar"]
