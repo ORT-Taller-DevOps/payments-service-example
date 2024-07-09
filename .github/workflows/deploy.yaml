@@ -36,8 +36,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with: 
-          name: java-artifact
-          path: target/
+          name: java-artifact.jar
+          path: target/*.jar
 
 
   generate_image:
@@ -72,7 +72,8 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: java-artifact
+          name: java-artifact.jar
+          path: /tmp
 
       - name: Build and push
         id: build-and-push
