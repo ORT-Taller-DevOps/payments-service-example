@@ -30,14 +30,14 @@ jobs:
           java-version: ${{ matrix.java-version }}
           cache: 'maven'
  
-      # - name: Build with Maven
-      #   run: mvn -B package --file pom.xml
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
 
-      # - name: Upload artifact
-      #   uses: actions/upload-artifact@v4
-      #   with: 
-      #     name: java-artifact
-      #     path: target/
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with: 
+          name: java-artifact
+          path: target/
 
 
   generate_image:
@@ -69,11 +69,10 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
 
-      # - name: Download artifact
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: java-artifact
-      #     path: .
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: java-artifact
 
       - name: Build and push
         id: build-and-push
