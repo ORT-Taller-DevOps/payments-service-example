@@ -24,16 +24,16 @@ resource "aws_eks_cluster" "eks" {
   name     = "AWSEKSCluster"
   vpc_config {
     subnet_ids = [
-      "subnet-0877da50b6315fc6c",
-      "subnet-0dd41fa6bc2b58537",
-      "subnet-05062a0788eb72ced",
-      "subnet-0597daea5fe4ffd2d",
-      "subnet-0edf0ff5dde54f446",
+      "subnet-006acb2fbb0acd7e1",
+      "subnet-0ed49e46ae4107c5f",
+      "subnet-0f2719fe3c3c6acd0",
+      "subnet-0f9074a6290555974",
+      "subnet-0ae7a7fc01e819c0e",
     ]
   }
 }
 
 resource "aws_ecr_repository" "ecr" {
   provider = aws.aws_provider
-  name = "payments-service-example"
+  name     = "payments-service-example"
 }
