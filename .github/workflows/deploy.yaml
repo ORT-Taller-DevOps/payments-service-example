@@ -72,16 +72,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-artifact.jar
-          path: /tmp/java-artifact.jar
-
-      - name: Print /tmp content
-        run: ls /tmp
+          path: ./java-artifact.jar
       
       - name: Build and push
         id: build-and-push
         uses: docker/build-push-action@v5
         with:
-          context: /tmp
+          context: .
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ env.ECR_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}
