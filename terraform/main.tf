@@ -20,7 +20,7 @@ provider "aws" {
 
 resource "aws_eks_cluster" "eks" {
   provider = aws.aws_provider
-  role_arn = "arn:aws:iam::227416266472:role/LabRole"
+  role_arn = var.role_arn
   name     = "AWSEKSCluster"
   vpc_config {
     subnet_ids = [
