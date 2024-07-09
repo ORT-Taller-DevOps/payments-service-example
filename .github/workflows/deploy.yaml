@@ -72,6 +72,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-artifact.jar
+          path: /tmp/java-artifact.jar
 
       - name: Build and push
         id: build-and-push
