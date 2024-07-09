@@ -74,6 +74,9 @@ jobs:
           name: java-artifact.jar
           path: /tmp/java-artifact.jar
 
+      - name: Print /tmp content
+        run: ls /tmp
+      
       - name: Build and push
         id: build-and-push
         uses: docker/build-push-action@v5
