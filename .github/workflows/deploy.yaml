@@ -19,7 +19,7 @@
     build:
       runs-on: ubuntu-latest
       outputs:
-        ecr_repository: ${{ steps.set_repo_name }}
+        ecr_repository: ${{ steps.set_repo_name.outputs.ECR_REPOSITORY }}
       strategy:
         matrix:
           java-version:
