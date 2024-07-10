@@ -168,5 +168,6 @@ jobs:
               -e "s/{{REGISTRY}}/${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com\/${{ env.ECR_REPOSITORY }}/g" \
               -e "s/{{TAG}}/latest/g" \
               -i kubernetes/deployment.yaml
+          cat kubernetes/deployment.yaml
           kubectl apply -f kubernetes/deployment.yaml
           kubectl rollout restart deployment payments-service-deployment
