@@ -11,8 +11,8 @@ env:
   TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
   TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
-  TF_VAR_aws_region: ${{vars.AWS_REGION}}
-  TF_VAR_role_arn: ${{secrets.AWS_ROLE_ARN}}
+  TF_VAR_aws_region: ${{ vars.AWS_REGION }}
+  TF_VAR_role_arn: ${{ secrets.AWS_ROLE_ARN }}
 
 jobs:
   build:
@@ -38,6 +38,7 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: Set file name as repository name
+        id: set_repo_name
         run: echo "ECR_REPOSITORY=$(basename $(ls target | grep *.jar | head -1) .jar)" >> $GITHUB_ENV
 
       - name: Upload artifact
@@ -47,6 +48,7 @@ jobs:
           path: target/*.jar
 
       - name: Set output for ECR_REPOSITORY
+        id: set_output
         run: echo "::set-output name=ecr_repository::$(basename $(ls target | grep *.jar | head -1) .jar)"
 
   set_up_ecr:
@@ -66,23 +68,23 @@ jobs:
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
-        working-directory: ${{env.TERRAFORM_WORKING_DIR}}
+        working-directory: ${{ env.TERRAFORM_WORKING_DIR }}
         continue-on-error: true
 
       - name: Terraform Init
         id: init
         run: terraform init
-        working-directory: ${{env.TERRAFORM_WORKING_DIR}}
+        working-directory: ${{ env.TERRAFORM_WORKING_DIR }}
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-        working-directory: ${{env.TERRAFORM_WORKING_DIR}}
+        working-directory: ${{ env.TERRAFORM_WORKING_DIR }}
 
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve
-        working-directory: ${{env.TERRAFORM_WORKING_DIR}}
+        working-directory: ${{ env.TERRAFORM_WORKING_DIR }}
         continue-on-error: true
 
   generate_image:
@@ -123,7 +125,7 @@ jobs:
       - name: Build, tag, and push docker image to Amazon ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{vars.AWS_ECR_REPOSITORY_NAME}}
+          REPOSITORY: ${{ vars.AWS_ECR_REPOSITORY_NAME }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
