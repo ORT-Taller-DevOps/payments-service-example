@@ -8,12 +8,12 @@ on:
 
 env:
   TERRAFORM_WORKING_DIR: "terraform"
-  ECR_REPOSITORY: ${{ vars.AWS_ECR_REPOSITORY_NAME }}
+  ECR_REPOSITORY: ""
   TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
   TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
   TF_VAR_aws_region: ${{vars.AWS_REGION}}
-  TF_VAR_role_arn: ${{vars.AWS_ROLE_ARN}}
+  TF_VAR_role_arn: ${{secrets.AWS_ROLE_ARN}}
 
 jobs:
   build:
@@ -38,6 +38,9 @@ jobs:
  
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+
+      - name: Set file name as repository name
+        run: export ECR_REPOSITORY=$(basename $(ls target | grep *.jar | head -1) .jar)
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -118,7 +121,7 @@ jobs:
       - name: Login to ECR
         uses: docker/login-action@v2
         with:
-          registry: "${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{vars.AWS_REGION}}.amazonaws.com/${{env.ECR_REPOSITORY}}"
+          registry: "${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}"
           username: ${{ secrets.AWS_ACCESS_KEY_ID }}
           password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       
