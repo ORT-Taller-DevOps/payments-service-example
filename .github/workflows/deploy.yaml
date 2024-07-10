@@ -153,5 +153,5 @@
   
             kubectl apply -f kubernetes/deployment.yaml
   
-            kubectl rollout restart deployment payments-service-deployment
+            kubectl rollout restart deployment ${{ needs.build.outputs.ecr_repository }}
   
