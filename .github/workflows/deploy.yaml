@@ -8,7 +8,6 @@ on:
 
 env:
   TERRAFORM_WORKING_DIR: "terraform"
-  ECR_REPOSITORY: ""
   TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
   TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
@@ -46,6 +45,9 @@ jobs:
         with: 
           name: java-artifact.jar
           path: target/*.jar
+
+      - name: Set output for ECR_REPOSITORY
+        run: echo "::set-output name=ecr_repository::$(basename $(ls target | grep *.jar | head -1) .jar)"
 
   set_up_ecr:
     runs-on: ubuntu-latest
@@ -163,9 +165,11 @@ jobs:
         run: aws eks update-kubeconfig --name AWSEKSCluster
       
       - name: Deploy to EKS
+        env:
+          ECR_REPOSITORY: ${{ needs.build.outputs.ecr_repository }}
         run: |
-          sed -e "s/{{SERVICE_NAME}}/${{ env.ECR_REPOSITORY }}/g" \
-              -e "s/{{REGISTRY}}/${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com\/${{ env.ECR_REPOSITORY }}/g" \
+          sed -e "s/{{SERVICE_NAME}}/$ECR_REPOSITORY/g" \
+              -e "s/{{REGISTRY}}/${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com\/$ECR_REPOSITORY/g" \
               -e "s/{{TAG}}/latest/g" \
               -i kubernetes/deployment.yaml
           cat kubernetes/deployment.yaml
