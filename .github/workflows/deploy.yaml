@@ -36,6 +36,8 @@
             cache: maven
         - name: Build with Maven
           run: mvn -B package --file pom.xml
+        - name: TEST BORRAR
+          run: basename $(ls target | grep *.jar | head -1) .jar
         - name: Set file name as repository name
           id: set_repo_name
           run: echo "ECR_REPOSITORY=$(basename $(ls target | grep *.jar | head -1) .jar)" >> "$GITHUB_OUTPUT"
