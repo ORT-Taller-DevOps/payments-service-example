@@ -108,10 +108,6 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Amazon ECR Login
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
