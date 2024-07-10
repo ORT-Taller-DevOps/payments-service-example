@@ -168,8 +168,8 @@ jobs:
         env:
           ECR_REPOSITORY: ${{ needs.build.outputs.ecr_repository }}
         run: |
-          sed -e "s/{{SERVICE_NAME}}/$ECR_REPOSITORY/g" \
-              -e "s/{{REGISTRY}}/${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com\/$ECR_REPOSITORY/g" \
+          sed -e "s/{{SERVICE_NAME}}/${{ env.ECR_REPOSITORY }}/g" \
+              -e "s/{{REGISTRY}}/${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com\/${{ env.ECR_REPOSITORY }}/g" \
               -e "s/{{TAG}}/latest/g" \
               -i kubernetes/deployment.yaml
           cat kubernetes/deployment.yaml
