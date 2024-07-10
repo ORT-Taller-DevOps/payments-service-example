@@ -40,7 +40,7 @@
           run: basename $(ls target | grep *.jar | head -1) .jar
         - name: Set file name as repository name
           id: set_repo_name
-          run: echo "ECR_REPOSITORY=$(basename $(ls target | grep *.jar | head -1) .jar)" >> "$GITHUB_OUTPUT"
+          run: echo "ECR_REPOSITORY=$(basename $(ls target | awk '/**.jar/ && !/spring-boot/' | head -1) .jar)" >> "$GITHUB_OUTPUT"
         - name: Upload artifact
           uses: actions/upload-artifact@v4
           with:
