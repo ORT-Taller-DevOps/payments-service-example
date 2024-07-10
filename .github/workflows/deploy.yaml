@@ -161,6 +161,9 @@ jobs:
 
       - name: Update kube config
         run: aws eks update-kubeconfig --name AWSEKSCluster
+
+      - name: List current dir
+        run: ls
       
       - name: Deploy to EKS
         run: |
