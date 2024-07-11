@@ -3,7 +3,7 @@ name: SonarCloud scan
 on:
   push:
     branches:
-      - master
+      - main
   pull_request: 
     types: [opened, synchronize, reopened]
   workflow_dispatch:
@@ -21,3 +21,7 @@ jobs:
       uses: sonarsource/sonarcloud-github-action@v2.3.0
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
+          -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}

@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: null
+  workflow_dispatch:
 env:
   TERRAFORM_WORKING_DIR: terraform
   TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -123,7 +123,7 @@ jobs:
         with:
           fetch-depth: 5
       - name: Install kubectl
-        uses: azure/setup-kubectl@v2.0
+        uses: Azure/setup-kubectl@v4
         with:
           version: ${{ matrix.kubectl_version }}
       - name: Configure AWS Credentials
@@ -149,4 +149,5 @@ jobs:
           cat kubernetes/deployment.yaml
 
           kubectl apply -f kubernetes/deployment.yaml
+
           kubectl rollout restart deployment ${{ needs.build.outputs.ecr_repository }}
