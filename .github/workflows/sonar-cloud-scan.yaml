@@ -8,8 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      ecr_repository: ${{ steps.set_repo_name.outputs.ECR_REPOSITORY }}
     strategy:
       matrix:
         java-version:
@@ -26,14 +24,6 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - name: Set file name as repository name
-        id: set_repo_name
-        run: echo "ECR_REPOSITORY=$(mvn help:evaluate -Dexpression=project.name -q -DforceStdout)" >> "$GITHUB_OUTPUT"
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: java-artifact.jar
-          path: target/*.jar
 
   sonarcloud:
     needs:
@@ -53,4 +43,4 @@ jobs:
         args: >
           -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
           -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
-          -Dsonar.java.binaries=**/target/
+          -Dsonar.java.binaries=target
