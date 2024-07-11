@@ -30,6 +30,8 @@ jobs:
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
+      - name: List target directory
+        run: ls -la target
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v2.3.0
         env:
@@ -38,4 +40,4 @@ jobs:
           args: >
             -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
-            -Dsonar.java.binaries=target
+            -Dsonar.java.binaries=target/classes/uy/edu/ort/devops/paymentsserviceexample
