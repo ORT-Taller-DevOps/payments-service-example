@@ -1,9 +1,6 @@
 name: SonarCloud scan
 
 on:
-  push:
-    branches:
-      - main
   pull_request: 
     types: [opened, synchronize, reopened]
   workflow_dispatch:
@@ -25,4 +22,4 @@ jobs:
         args: >
           -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
           -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
-          -Dsonar.java.binaries=**/target/classes
+          -Dsonar.java.binaries=**/target/
