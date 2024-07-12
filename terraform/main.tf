@@ -38,7 +38,7 @@ resource "aws_eks_node_group" "node_group" {
   node_role_arn   = aws_eks_cluster.eks.role_arn
   subnet_ids      = aws_eks_cluster.eks.vpc_config[0].subnet_ids
   capacity_type   = "ON_DEMAND"
-  instance_types  = ["t3.nano"]
+  instance_types  = ["t3.micro"]
   scaling_config {
     desired_size = 2
     max_size     = 2
