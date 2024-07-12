@@ -44,6 +44,9 @@ resource "aws_eks_node_group" "node_group" {
     max_size     = 2
     min_size     = 2
   }
+  update_config {
+    max_unavailable = 1
+  }
 }
 
 resource "aws_ecr_repository" "ecr" {
