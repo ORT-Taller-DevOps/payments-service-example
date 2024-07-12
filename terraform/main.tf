@@ -32,18 +32,18 @@ resource "aws_eks_cluster" "eks" {
 }
 
 resource "aws_eks_node_group" "node_group" {
-  depends_on   = [aws_eks_cluster.eks]
-  provider     = aws.aws_provider
-  cluster_name = aws_eks_cluster.eks.name
+  provider        = aws.aws_provider
+  cluster_name    = aws_eks_cluster.eks.name
+  node_group_name = "node_group"
+  node_role_arn   = aws_eks_cluster.eks.role_arn
+  subnet_ids      = aws_eks_cluster.eks.vpc_config[0].subnet_ids
+  capacity_type   = "ON_DEMAND"
+  instance_types  = ["t3.nano"]
   scaling_config {
-    desired_size = 1
+    desired_size = 2
     max_size     = 2
-    min_size     = 1
+    min_size     = 2
   }
-  subnet_ids    = aws_eks_cluster.eks.vpc_config[0].subnet_ids
-  node_role_arn = aws_eks_cluster.eks.role_arn
-  capacity_type = "ON_DEMAND"
-  instance_types = ["t3.nano"]
 }
 
 resource "aws_ecr_repository" "ecr" {

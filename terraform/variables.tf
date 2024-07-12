@@ -22,5 +22,4 @@ variable "aws_profile" {
 
 variable "role_arn" {
   type    = string
-  default = "default"
 }
