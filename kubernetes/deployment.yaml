@@ -14,9 +14,15 @@ spec:
       labels:
         app: "{{SERVICE_NAME}}"
     spec:
+      nodeSelector:
+        env: "{{ENVIRONMENT}}"
       containers:
         - name: "{{SERVICE_NAME}}"
           image: "{{REGISTRY}}/{{SERVICE_NAME}}:{{TAG}}"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
