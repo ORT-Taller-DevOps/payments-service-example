@@ -4,9 +4,7 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.16"
     }
-
   }
-
   required_version = ">= 1.2.0"
 }
 
@@ -31,6 +29,21 @@ resource "aws_eks_cluster" "eks" {
       "subnet-0ae7a7fc01e819c0e",
     ]
   }
+}
+
+resource "aws_eks_node_group" "node_group" {
+  depends_on   = [aws_eks_cluster.eks]
+  provider     = aws.aws_provider
+  cluster_name = aws_eks_cluster.eks.name
+  scaling_config {
+    desired_size = 1
+    max_size     = 2
+    min_size     = 1
+  }
+  subnet_ids    = aws_eks_cluster.eks.vpc_config[0].subnet_ids
+  node_role_arn = aws_eks_cluster.eks.role_arn
+  capacity_type = "ON_DEMAND"
+  instance_types = ["t3.nano"]
 }
 
 resource "aws_ecr_repository" "ecr" {
