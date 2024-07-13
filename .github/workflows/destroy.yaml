@@ -36,6 +36,8 @@ jobs:
               --nodegroup-name node_group \
               --cluster-name AWSEKSCluster \
               --region ${{ vars.AWS_REGION }}
+      - name: Wait for node group deletion
+        run: .github/scripts/wait_for_nodegroup_deletion.sh node_group AWSEKSCluster ${{ vars.AWS_REGION }}
       - name: Delete cluster
         run: >
           aws eks delete-cluster \
