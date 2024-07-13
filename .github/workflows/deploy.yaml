@@ -1,12 +1,13 @@
 name: Deploy Java application to EKS
 
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
 env:
   TERRAFORM_WORKING_DIR: terraform
+  TF_VAR_environment: ${{ vars.ENVIRONMENT }}
   TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
   TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}

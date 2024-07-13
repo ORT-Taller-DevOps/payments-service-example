@@ -36,3 +36,6 @@ build/
 */.terraform
 .terraform.lock.hcl
 terraform.tfstate*
+
+### .jar ###
+*.jar
