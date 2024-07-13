@@ -11,7 +11,7 @@ env:
   TF_VAR_aws_region: ${{ vars.AWS_REGION }}
   TF_VAR_role_arn: ${{ secrets.AWS_ROLE_ARN }}
 jobs:
-  destroy:
+  terraform-destroy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -30,3 +30,14 @@ jobs:
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
         working-directory: ${{ env.TERRAFORM_WORKING_DIR }}
+      - name: Delete node group
+        run: >
+          aws eks delete-nodegroup \
+              --nodegroup-name node_group \
+              --cluster-name AWSEKSCluster \
+              --region ${{ vars.AWS_REGION }}
+      - name: Delete cluster
+        run: >
+          aws eks delete-cluster \
+              --name AWSEKSCluster \
+              --region ${{ vars.AWS_REGION }}
