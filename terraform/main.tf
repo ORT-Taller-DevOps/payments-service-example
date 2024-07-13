@@ -39,7 +39,7 @@ resource "aws_eks_node_group" "node_group" {
   subnet_ids      = aws_eks_cluster.eks.vpc_config[0].subnet_ids
   capacity_type   = "ON_DEMAND"
   instance_types  = ["t3.micro"]
-  tags = {
+  labels = {
     env = var.environment
   }
   scaling_config {
