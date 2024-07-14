@@ -132,7 +132,7 @@ jobs:
         run: >
           sed -e "s/{{SERVICE_NAME}}/${{ env.TF_VAR_repository }}/g" \
               -e "s/{{ENVIRONMENT}}/${{ vars.ENVIRONMENT }}/g" \
-              -e "s/{{REGISTRY}}/${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com\/${{ env.TF_VAR_repository }}/g" \
+              -e "s/{{REGISTRY}}/${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/g" \
               -e "s/{{TAG}}/latest/g" \
               -i kubernetes/deployment.yaml
           cat kubernetes/deployment.yaml
