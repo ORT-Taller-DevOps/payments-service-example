@@ -44,7 +44,9 @@ jobs:
           aws eks delete-cluster \
               --name AWSEKSCluster \
               --region ${{ vars.AWS_REGION }}
-      - name: Delete repository
-        run: aws ecr delete-repository --repository-name ${{ env.TF_VAR_repository }}
+      - name: Empty and delete ECR repository
+        run: >
+          .github/scripts/empty_ecr_repository.sh ${{ env.TF_VAR_repository }}
+          aws ecr delete-repository --repository-name ${{ env.TF_VAR_repository }}
       - name: Delete load balancer
-        run: aws elb delete-load-balancer --load-balancer-name $(./.github/scripts/get_load_balancer_for_service ${{ env.TF_VAR_repository }}-service)
+        run: aws elb delete-load-balancer --load-balancer-name $(.github/scripts/get_load_balancer_name.sh ${{ env.TF_VAR_repository }}-service)
