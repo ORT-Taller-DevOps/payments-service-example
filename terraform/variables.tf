@@ -2,6 +2,10 @@ variable "environment" {
   type = string
 }
 
+variable "repository" {
+  type = string
+}
+
 variable "aws_access_key_id" {
   type = string
 }
@@ -25,5 +29,5 @@ variable "aws_profile" {
 }
 
 variable "role_arn" {
-  type    = string
+  type = string
 }

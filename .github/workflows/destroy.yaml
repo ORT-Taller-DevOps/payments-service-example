@@ -10,6 +10,7 @@ env:
   TF_VAR_aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
   TF_VAR_aws_region: ${{ vars.AWS_REGION }}
   TF_VAR_role_arn: ${{ secrets.AWS_ROLE_ARN }}
+  TF_VAR_repository: ${{ github.event.repository.name }}
 jobs:
   terraform-destroy:
     runs-on: ubuntu-latest
@@ -43,3 +44,7 @@ jobs:
           aws eks delete-cluster \
               --name AWSEKSCluster \
               --region ${{ vars.AWS_REGION }}
+      - name: Delete repository
+        run: aws ecr delete-repository --repository-name ${{ env.TF_VAR_repository }}
+      - name: Delete load balancer
+        run: aws elb delete-load-balancer --load-balancer-name $(./.github/scripts/get_load_balancer_for_service ${{ env.TF_VAR_repository }}-service)

@@ -54,5 +54,5 @@ resource "aws_eks_node_group" "node_group" {
 
 resource "aws_ecr_repository" "ecr" {
   provider = aws.aws_provider
-  name     = "payments-service-example"
+  name     = var.repository
 }
