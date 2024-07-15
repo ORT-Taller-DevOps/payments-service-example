@@ -22,11 +22,11 @@ resource "aws_eks_cluster" "eks" {
   name     = "AWSEKSCluster"
   vpc_config {
     subnet_ids = [
-      "subnet-006acb2fbb0acd7e1",
-      "subnet-0ed49e46ae4107c5f",
-      "subnet-0f2719fe3c3c6acd0",
-      "subnet-0f9074a6290555974",
-      "subnet-0ae7a7fc01e819c0e",
+      "subnet-00472f5a3c442297d",
+      "subnet-0a5de4b5eb1a44c74",
+      "subnet-08d3a1aaa06749b4f",
+      "subnet-0bf6ca46c41a0c9ad",
+      "subnet-013d3ef8fbd090b6e",
     ]
   }
 }
