@@ -12,7 +12,7 @@ env:
   TF_VAR_role_arn: ${{ secrets.AWS_ROLE_ARN }}
   TF_VAR_repository: ${{ github.event.repository.name }}
 jobs:
-  terraform-destroy:
+  destroy-infra:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
