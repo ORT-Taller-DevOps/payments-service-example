@@ -46,7 +46,6 @@ metadata:
   name: "{{SERVICE_NAME}}-service"
 spec:
   type: LoadBalancer
-  healthCheckNodePort: 8080
   externalTrafficPolicy: Local
   selector:
     app: "{{SERVICE_NAME}}"
