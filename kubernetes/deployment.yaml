@@ -32,8 +32,8 @@ spec:
           readinessProbe:
             tcpSocket:
               port: 8080
-            initialDelaySeconds: 15
-            periodSeconds: 20
+            initialDelaySeconds: 5
+            periodSeconds: 10
           livenessProbe:
             tcpSocket:
               port: 8080
@@ -49,6 +49,5 @@ spec:
     app: "{{SERVICE_NAME}}"
   ports:
     - protocol: TCP
-      port: 80
+      port: 8080
       targetPort: 8080
-  type: LoadBalancer

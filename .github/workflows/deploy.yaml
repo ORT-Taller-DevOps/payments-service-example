@@ -35,7 +35,7 @@ jobs:
         with:
           name: java-artifact.jar
           path: target/*.jar
-  set_up_ecr:
+  setup_infra:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -64,7 +64,7 @@ jobs:
   generate_image:
     needs:
       - build
-      - set_up_ecr
+      - setup_infra
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
