@@ -5,7 +5,7 @@ metadata:
   labels:
     app: "{{SERVICE_NAME}}"
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: "{{SERVICE_NAME}}"
@@ -32,12 +32,12 @@ spec:
           readinessProbe:
             tcpSocket:
               port: 8080
-            initialDelaySeconds: 5
+            initialDelaySeconds: 90
             periodSeconds: 10
           livenessProbe:
             tcpSocket:
               port: 8080
-            initialDelaySeconds: 30
+            initialDelaySeconds: 90
             periodSeconds: 10
 ---
 apiVersion: v1
