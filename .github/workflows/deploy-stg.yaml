@@ -1,16 +1,20 @@
-name: Deploy Java application to EKS
+name: "[STAGING] Deploy Java application"
 
 on:
   workflow_dispatch:
 env:
   REPOSITORY: ${{ github.event.repository.name }}
+  DEVOPS_REPOSITORY: devops
+  ENVIRONMENT: stg
 jobs:
   build_and_push_image:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 5
+          fetch-depth: 1
+          repository: "ORT-Taller-DevOps/${{env.DEVOPS_REPOSITORY}}"
+          path: ${{env.DEVOPS_REPOSITORY}}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Configure AWS Credentials
@@ -33,6 +37,7 @@ jobs:
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
           docker push $REGISTRY/$REPOSITORY --all-tags
+        working-directory: "${{env.DEVOPS_REPOSITORY}}/${{env.REPOSITORY}}"
   deploy:
     needs:
       - build_and_push_image
@@ -44,7 +49,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 5
+          fetch-depth: 1
+          repository: "ORT-Taller-DevOps/${{env.DEVOPS_REPOSITORY}}"
+          path: ${{env.DEVOPS_REPOSITORY}}
       - name: Install kubectl
         uses: Azure/setup-kubectl@v4
         with:
@@ -62,11 +69,11 @@ jobs:
         with:
           mask-password: "true"
       - name: Update kube config
-        run: aws eks update-kubeconfig --name AWSEKSCluster
+        run: aws eks update-kubeconfig --name cluster_${{env.ENVIRONMENT}}
       - name: Deploy to EKS
         run: >
           sed -e "s/{{SERVICE_NAME}}/${{ env.REPOSITORY }}/g" \
-              -e "s/{{ENVIRONMENT}}/${{ vars.ENVIRONMENT }}/g" \
+              -e "s/{{ENVIRONMENT}}/${{ env.ENVIRONMENT }}/g" \
               -e "s/{{REGISTRY}}/${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/g" \
               -e "s/{{TAG}}/latest/g" \
               -i kubernetes/deployment.yaml
