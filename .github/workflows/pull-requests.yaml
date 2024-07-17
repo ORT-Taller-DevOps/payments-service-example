@@ -1,11 +1,10 @@
-name: Pull requests workflow
+name: Build and test
 
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened]
     branches:
-      - develop
-      - staging
+      - development
       - main
   workflow_dispatch:
 

@@ -33,11 +33,11 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ env.REPOSITORY }}
+          DEVOPS_REPOSITORY: ${{env.DEVOPS_REPOSITORY}}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest -f $DEVOPS_REPOSITORY .
           docker push $REGISTRY/$REPOSITORY --all-tags
-        working-directory: "${{env.DEVOPS_REPOSITORY}}/${{env.REPOSITORY}}"
   deploy:
     needs:
       - build_and_push_image
