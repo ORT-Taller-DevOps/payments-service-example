@@ -36,7 +36,7 @@ jobs:
           DEVOPS_REPOSITORY: ${{env.DEVOPS_REPOSITORY}}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest -f $DEVOPS_REPOSITORY .
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest -f $DEVOPS_REPOSITORY/Dockerfile .
           docker push $REGISTRY/$REPOSITORY --all-tags
   deploy:
     needs:
