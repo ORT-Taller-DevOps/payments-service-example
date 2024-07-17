@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 5
+      - uses: actions/checkout@v4
+        with:
           fetch-depth: 1
           repository: "ORT-Taller-DevOps/${{env.DEVOPS_REPOSITORY}}"
           path: ${{env.DEVOPS_REPOSITORY}}
