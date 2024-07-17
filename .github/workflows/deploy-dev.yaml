@@ -15,6 +15,7 @@ jobs:
           fetch-depth: 1
           repository: "ORT-Taller-DevOps/${{env.DEVOPS_REPOSITORY}}"
           path: ${{env.DEVOPS_REPOSITORY}}
+      - run: ls
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Configure AWS Credentials
