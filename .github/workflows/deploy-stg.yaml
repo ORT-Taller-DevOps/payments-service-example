@@ -1,6 +1,9 @@
 name: "[STAGING] Deploy Java application"
 
 on:
+  push:
+    branches:
+      - release/*
   workflow_dispatch:
 env:
   REPOSITORY: ${{ github.event.repository.name }}
@@ -74,6 +77,8 @@ jobs:
           mask-password: "true"
       - name: Update kube config
         run: aws eks update-kubeconfig --name cluster_${{env.ENVIRONMENT}}
+      - name: Delete previous deployment
+        run: kubectl delete -f ${{ env.DEVOPS_REPOSITORY }}/${{ env.REPOSITORY }}/kubernetes-${{ env.ENVIRONMENT }}.yaml
+        continue-on-error: true
       - name: Deploy to EKS
-        run: >
-          kubectl apply -f ${{ env.DEVOPS_REPOSITORY }}/${{ env.REPOSITORY }}/kubernetes-${{ env.ENVIRONMENT }}.yaml
+        run: kubectl apply -f ${{ env.DEVOPS_REPOSITORY }}/${{ env.REPOSITORY }}/kubernetes-${{ env.ENVIRONMENT }}.yaml
