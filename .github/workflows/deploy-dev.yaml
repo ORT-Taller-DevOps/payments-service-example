@@ -1,4 +1,4 @@
-name: "[STAGING] Deploy Java application"
+name: "[DEVELOPMENT] Deploy Java application"
 
 on:
   workflow_dispatch:
