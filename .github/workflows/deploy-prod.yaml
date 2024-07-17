@@ -77,4 +77,3 @@ jobs:
       - name: Deploy to EKS
         run: >
           kubectl apply -f ${{ env.DEVOPS_REPOSITORY }}/${{ env.REPOSITORY }}/kubernetes-${{ env.ENVIRONMENT }}.yaml
-          kubectl rollout restart deployment ${{ env.REPOSITORY }} 
