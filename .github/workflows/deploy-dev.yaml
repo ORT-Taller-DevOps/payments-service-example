@@ -1,0 +1,82 @@
+name: "[STAGING] Deploy Java application"
+
+on:
+  workflow_dispatch:
+env:
+  REPOSITORY: ${{ github.event.repository.name }}
+  DEVOPS_REPOSITORY: devops
+  ENVIRONMENT: dev
+jobs:
+  build_and_push_image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: "ORT-Taller-DevOps/${{env.DEVOPS_REPOSITORY}}"
+          path: ${{env.DEVOPS_REPOSITORY}}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: "true"
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ env.REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
+          docker push $REGISTRY/$REPOSITORY --all-tags
+        working-directory: "${{env.DEVOPS_REPOSITORY}}/${{env.REPOSITORY}}"
+  deploy:
+    needs:
+      - build_and_push_image
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        kubectl_version:
+          - v1.30.2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: "ORT-Taller-DevOps/${{env.DEVOPS_REPOSITORY}}"
+          path: ${{env.DEVOPS_REPOSITORY}}
+      - name: Install kubectl
+        uses: Azure/setup-kubectl@v4
+        with:
+          version: ${{ matrix.kubectl_version }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: "true"
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name cluster_${{env.ENVIRONMENT}}
+      - name: Deploy to EKS
+        run: >
+          sed -e "s/{{SERVICE_NAME}}/${{ env.REPOSITORY }}/g" \
+              -e "s/{{ENVIRONMENT}}/${{ env.ENVIRONMENT }}/g" \
+              -e "s/{{REGISTRY}}/${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/g" \
+              -e "s/{{TAG}}/latest/g" \
+              -i kubernetes/deployment.yaml
+          cat kubernetes/deployment.yaml
+
+          kubectl apply -f kubernetes/deployment.yaml
