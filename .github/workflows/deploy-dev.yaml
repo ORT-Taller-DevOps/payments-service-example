@@ -40,7 +40,6 @@ jobs:
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest -f ${{env.DEVOPS_REPOSITORY}}/$REPOSITORY/Dockerfile .
           docker push $REGISTRY/$REPOSITORY --all-tags
-        working-directory: ../../
   deploy:
     needs:
       - build_and_push_image
