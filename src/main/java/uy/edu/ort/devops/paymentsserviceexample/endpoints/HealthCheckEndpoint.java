@@ -10,6 +10,6 @@ public class HealthCheckEndpoint {
 
     @GetMapping()
     public String healthCheck() {
-        return "OK";
+        return "OK - Demostración";
     }
 }
